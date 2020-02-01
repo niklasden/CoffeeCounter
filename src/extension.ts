@@ -1,28 +1,15 @@
+'use strict';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-var path=require('path');
+import { posix } from 'path';
+import { isString } from 'util';
 
 let coffeemugitem: vscode.StatusBarItem;
-let count = 1;
 
 /* Read local.json file to keep track of changes
-   Currently the file is not created :/
 */
-const newFile = vscode.Uri.parse('untitled:' + path.join(vscode.workspace.rootPath, 'safsa.txt'));
-vscode.workspace.openTextDocument(newFile).then(document => {
-    const edit = new vscode.WorkspaceEdit();
-    edit.insert(newFile, new vscode.Position(0, 0), "Hello world!");
-    return vscode.workspace.applyEdit(edit).then(success => {
-        if (success) {
-            vscode.window.showTextDocument(document);
-        } else {
-            vscode.window.showInformationMessage('Error!');
-        }
-    });
-});
-
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -31,15 +18,67 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "coffeecounter" is now active!');
+	var currentdrink = vscode.workspace.getConfiguration().get('drink');
+	console.log(`The current drink is `+currentdrink);
+
+	if (!vscode.workspace.workspaceFolders) {
+		return vscode.window.showInformationMessage('No folder or workspace opened!');
+	}
+
+	const folderUri = vscode.workspace.workspaceFolders[0].uri;
+	const fileUri = folderUri.with({ path: posix.join(folderUri.path, 'drinks.json') });
+	var count = 0;
+
+	//writes initial json file so we can keep track of how much coffee we have
+	var writeinitial = () => {
+		vscode.window.showInformationMessage("Drinks file wasn't there so I created it!");
+		const msg = '{"coffee": {"counter": 0},"tea": {"counter": 0},"water": {"counter": 0},"coke": {"counter": 0},"beer": {"counter": 0},"redbull": {"counter": 0}}';
+		var jsonObj = JSON.parse(msg);
+		var jsonStr = JSON.stringify(jsonObj);
+		var buf = Buffer.from(jsonStr, "utf-8");
+		vscode.workspace.fs.writeFile(fileUri, buf);
+	};
+
+	//runs initially to check if a file exists and updates local variable.
+	var readFileasync = async () => {
+		var readData = await vscode.workspace.fs.readFile(fileUri);
+		var readStr = Buffer.from(readData).toString('utf-8');
+		var drinksjson = JSON.parse(readStr);
+		updatecount(drinksjson);
+		vscode.window.showInformationMessage(`I was able to read the storage file. Enjoy your ${currentdrink}!😄`);
+	};
+
+	//gets launched when the coffemug is pressed, reads in the file, increases the counter, then writes it & updates the local variable
+	var increasedrink = async () => {
+		var readData = await vscode.workspace.fs.readFile(fileUri);
+		var readStr = Buffer.from(readData).toString('utf-8');
+		var drinksjson = JSON.parse(readStr);
+		console.log(drinksjson.tea.counter);
+		drinksjson['tea']['counter'] += 1;
+		console.log(drinksjson.coffee.counter);
+		var jsonStr = JSON.stringify(drinksjson);
+		var buf = Buffer.from(jsonStr, "utf-8");
+		vscode.workspace.fs.writeFile(fileUri, buf);
+		updatecount(drinksjson);
+	};
+
+	//Updates the local counter with the contents of the json file
+	var updatecount = (drinksjson: any) => {
+		console.log('The drink should be', currentdrink);
+		count = drinksjson.currentdrink.counter;
+	};
+
+	//This checks if the drinks.json file exists, in case it doesnt it gets written to the filesystem
+	readFileasync().catch(error => writeinitial());
 
 	const mycommand = 'sample.showCoffeeCount';
 	subscriptions.push((vscode.commands.registerCommand(mycommand, () => {
-		vscode.window.showInformationMessage(`You had, ${count} coffee!`);
-		drinkCoffee();
+		increasedrink();
+		vscode.window.showInformationMessage(`You had, ${count} ${currentdrink}!`);
 	})));
 
 	// create new status bar item that we can now manage
-	coffeemugitem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right,100);
+	coffeemugitem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 	coffeemugitem.command = mycommand;
 	subscriptions.push(coffeemugitem);
 
@@ -47,7 +86,7 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 	//item is always up-to-date
 	subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateCoffeeMug));
 	subscriptions.push(vscode.window.onDidChangeTextEditorSelection(updateCoffeeMug));
-	
+
 	//update status bar item once at start
 	updateCoffeeMug();
 }
@@ -57,10 +96,5 @@ function updateCoffeeMug(): void {
 	coffeemugitem.show();
 }
 
-function drinkCoffee():void {
-	count = count + 1;
-}
-
-
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }

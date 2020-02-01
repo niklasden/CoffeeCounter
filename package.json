@@ -1,6 +1,7 @@
 {
 	"name": "coffeecounter",
 	"displayName": "CoffeeCounter",
+	"publisher": "Niklas Denneler",
 	"description": "Keeping track of how much coffee we drink while coding",
 	"version": "0.0.1",
 	"engines": {
@@ -18,6 +19,19 @@
 			{
 				"command": "extension.helloWorld",
 				"title": "Hello World"
+			}
+		], "configuration": [ 
+			{
+			"title": "Coffee Counter",
+			"properties": {
+				"drink": {
+					"type":"string",
+					"default": "coffee",
+					"enum": ["coffee", "tea", "water", "coke", "beer"],
+					"description": "Select the drink you are having right now"
+				}
+
+			}
 			}
 		]
 	},
