@@ -20,18 +20,24 @@
 				"command": "extension.helloWorld",
 				"title": "Hello World"
 			}
-		], "configuration": [ 
+		],
+		"configuration": [
 			{
-			"title": "Coffee Counter",
-			"properties": {
-				"drink": {
-					"type":"string",
-					"default": "coffee",
-					"enum": ["coffee", "tea", "water", "coke", "beer"],
-					"description": "Select the drink you are having right now"
+				"title": "Coffee Counter",
+				"properties": {
+					"drink": {
+						"type": "string",
+						"default": "coffee",
+						"enum": [
+							"coffee",
+							"tea",
+							"water",
+							"coke",
+							"beer"
+						],
+						"description": "Select the drink you are having right now"
+					}
 				}
-
-			}
 			}
 		]
 	},
@@ -52,5 +58,8 @@
 		"typescript": "^3.6.4",
 		"tslint": "^5.20.0",
 		"vscode-test": "^1.2.2"
+	},
+	"dependencies": {
+		"@types/lodash": "^4.14.149"
 	}
 }

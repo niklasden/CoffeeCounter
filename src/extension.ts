@@ -4,7 +4,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { posix } from 'path';
-import { isString } from 'util';
+import * as _ from "lodash";
 
 let coffeemugitem: vscode.StatusBarItem;
 
@@ -53,9 +53,9 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 		var readData = await vscode.workspace.fs.readFile(fileUri);
 		var readStr = Buffer.from(readData).toString('utf-8');
 		var drinksjson = JSON.parse(readStr);
-		console.log(drinksjson.tea.counter);
-		drinksjson['tea']['counter'] += 1;
-		console.log(drinksjson.coffee.counter);
+		var incrcount = _.get(drinksjson, [`${currentdrink}`, 'counter']);
+		incrcount += 1;
+		_.set(drinksjson, [`${currentdrink}`, 'counter'], incrcount);
 		var jsonStr = JSON.stringify(drinksjson);
 		var buf = Buffer.from(jsonStr, "utf-8");
 		vscode.workspace.fs.writeFile(fileUri, buf);
@@ -64,8 +64,8 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 
 	//Updates the local counter with the contents of the json file
 	var updatecount = (drinksjson: any) => {
-		console.log('The drink should be', currentdrink);
-		count = drinksjson.currentdrink.counter;
+		console.log(_.get(drinksjson, [`${currentdrink}`, 'counter']));
+		count = _.get(drinksjson, [`${currentdrink}`, 'counter']);
 	};
 
 	//This checks if the drinks.json file exists, in case it doesnt it gets written to the filesystem
