@@ -7,7 +7,7 @@ import { posix } from 'path';
 import * as _ from "lodash";
 
 let coffeemugitem: vscode.StatusBarItem;
-
+var currentdrink: any = '';
 /* Read local.json file to keep track of changes
 */
 
@@ -20,6 +20,14 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "coffeecounter" is now active!');
 	var currentdrink = vscode.workspace.getConfiguration().get('drink');
 	console.log(`The current drink is `+currentdrink);
+	
+	//this function updates the currentdrink on changes to the Config file
+	vscode.workspace.onDidChangeConfiguration( event => {
+		if (event.affectsConfiguration('drink')) {
+			currentdrink = vscode.workspace.getConfiguration().get('drink');
+			vscode.window.showInformationMessage('You changed your drink to '+currentdrink);
+		}
+	});
 
 	if (!vscode.workspace.workspaceFolders) {
 		return vscode.window.showInformationMessage('No folder or workspace opened!');
@@ -45,7 +53,7 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 		var readStr = Buffer.from(readData).toString('utf-8');
 		var drinksjson = JSON.parse(readStr);
 		updatecount(drinksjson);
-		vscode.window.showInformationMessage(`I was able to read the storage file. Enjoy your ${currentdrink}!😄`);
+		vscode.window.showInformationMessage(`I was able to read the storage file. Enjoy your Drinks!😄`);
 	};
 
 	//gets launched when the coffemug is pressed, reads in the file, increases the counter, then writes it & updates the local variable
@@ -64,7 +72,6 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 
 	//Updates the local counter with the contents of the json file
 	var updatecount = (drinksjson: any) => {
-		console.log(_.get(drinksjson, [`${currentdrink}`, 'counter']));
 		count = _.get(drinksjson, [`${currentdrink}`, 'counter']);
 	};
 
