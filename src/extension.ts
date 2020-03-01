@@ -2,12 +2,10 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import { posix } from 'path';
 import * as _ from "lodash";
 
 let coffeemugitem: vscode.StatusBarItem;
-var currentdrink: any = '';
 /* Read local.json file to keep track of changes
 */
 
@@ -17,9 +15,8 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "coffeecounter" is now active!');
+	// console.log('Congratulations, your extension "coffeecounter" is now active!');
 	var currentdrink = vscode.workspace.getConfiguration().get('drink');
-	console.log(`The current drink is `+currentdrink);
 	
 	//this function updates the currentdrink on changes to the Config file
 	vscode.workspace.onDidChangeConfiguration( event => {
@@ -35,7 +32,7 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 
 	const folderUri = vscode.workspace.workspaceFolders[0].uri;
 	const fileUri = folderUri.with({ path: posix.join(folderUri.path, 'drinks.json') });
-	var count = 0;
+	let count = 0;
 
 	//writes initial json file so we can keep track of how much coffee we have
 	var writeinitial = () => {
@@ -71,7 +68,7 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 	};
 
 	//Updates the local counter with the contents of the json file
-	var updatecount = (drinksjson: any) => {
+	var updatecount = (drinksjson: JSON) => {
 		count = _.get(drinksjson, [`${currentdrink}`, 'counter']);
 	};
 
