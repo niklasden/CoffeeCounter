@@ -1,65 +1,41 @@
-# coffeecounter README
+## ☕ Coffee Counter README ☕
 
-This is the README for your extension "coffeecounter". After writing up a brief description, we recommend including the following sections.
+Coffee Counter is a extension for VSCode, which lets you keep track of the drinks you have while coding.
+Please be vary this is my first TS Project and might include some bugs, which I will take care of in the future. To keep track of your consumption, a small drinks.json file will be created which should be located in your project root after the first startup of the extension. I recommend adding this to your version control system.
+This Extension was coded to get more familiar with Typescript and modern JS Workflows.
 
-## Features
+## Features 
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-
+There is a small coffee mug symbol at the bottom bar of your vscode window. Left-clicking on there will increase your drink.
+You can change your favorite drink in the vscode settings under CoffeeCounter.
+If you need extra drinks implemented, just hit me up with a pull request.
 
 ## Requirements
 
 Latest Version of VS Code
+Empty stomach ;-)
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+* `CoffeeCounter.drink`: select your drink
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+¯\_(ツ)_/¯
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
+Initial release of the CoffeeCounter, local JSON File servers as a data storage.
 
-Initial release of the CoffeeCounter, local JSON File servers as a database
+## License
+- Copyright 2020 © <a href="https://niklas.page/dev" target="_blank">Niklas Denneler</a>.
 
-### 1.0.1
 
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Enjoy your coffee!
 
 -----------------------------------------------------------------------------------------------------------
 
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**

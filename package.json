@@ -1,8 +1,9 @@
 {
 	"name": "coffeecounter",
 	"displayName": "CoffeeCounter",
-	"publisher": "Niklas Denneler",
+	"publisher": "Niklas",
 	"description": "Keeping track of how much coffee we drink while coding",
+	"repository": "niklasden/CoffeeCounter",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.41.0"
@@ -17,8 +18,8 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"command": "",
+				"title": ""
 			}
 		],
 		"configuration": [
